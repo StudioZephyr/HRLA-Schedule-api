@@ -1,7 +1,7 @@
 {
-  "name": "HRLA-Scheduler-api",
+  "name": "hrla-scheduler-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "RESTful API for HRLA Scheduler",
   "scripts": {
     "start": "node bin/entry.js production",
     "start-dev": "node bin/entry.js"
