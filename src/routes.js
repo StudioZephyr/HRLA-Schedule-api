@@ -17,7 +17,8 @@ import {
 } from './controllers/contactInfoController';
 
 import {
-  getAllRooms
+  getAllRooms,
+  getAllRoomTimeslots
 } from './controllers/roomController';
 
 const Router = express.Router();
@@ -42,5 +43,8 @@ Router.route('contact/:id')
 
 Router.route('/rooms')
   .get(getAllRooms);
+
+Router.route('/room')
+  .get(getAllRoomTimeslots);
 
 export { Router };
