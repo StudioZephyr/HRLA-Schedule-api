@@ -109,4 +109,4 @@ const deleteUser = (id) => {
   });
 };
 
-export { getAllUsers, getPW, updateUser, deleteUser };
+export { getAllUsers, getPW, updateUser, deleteUser, getSingleUser };
