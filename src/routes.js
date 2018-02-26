@@ -19,7 +19,8 @@ import {
 import {
   getAllRooms,
   getAllRoomTimeslots,
-  createRoom
+  createRoom,
+  updateRoomName
 } from './controllers/roomController';
 
 const Router = express.Router();
@@ -48,5 +49,8 @@ Router.route('/rooms')
 Router.route('/room')
   .get(getAllRoomTimeslots)
   .post(createRoom);
+
+Router.route('/room/:id')
+  .put(updateRoomName);
 
 export { Router };
