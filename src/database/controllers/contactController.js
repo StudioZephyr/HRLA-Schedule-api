@@ -79,4 +79,31 @@ const updateContact = (contactObj, id) => {
   });
 };
 
-export { getAllContacts, addContact, updateContact };
+const deleteContact = (id) => {
+  return new Promise((resolve, reject) => {
+    Contact.destroy({
+      where: { id }
+    })
+      .then(destroyed => {
+        if (destroyed !== 0) {
+          reject({
+            message: `Error finding Contact to delete`,
+            found: false,
+            contact: null,
+          });
+        } else {
+          resolve('Contact Deleted');
+        }
+      })
+      .catch(err => {
+        console.log(`Error deleting Contact. Error: ${err}`);
+        reject({
+          message: `Error deleting Contact`,
+          found: null,
+          contact: false,
+        });
+      });
+  });
+};
+
+export { getAllContacts, addContact, updateContact, deleteContact };
