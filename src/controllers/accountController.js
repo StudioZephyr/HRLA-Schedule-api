@@ -1,6 +1,7 @@
 import { 
   getAllUsers,
-  getPW
+  getPW,
+  updateUser
 } from '../database/controllers/userController';
 
 import {
@@ -47,4 +48,14 @@ const checkLogin = (req, res) => {
     });
 };
 
-export { getAllLogins, checkLogin };
+const updateLogin = (req, res) => {
+  updateUser(req.body, req.params.id)
+    .then(user => {
+      res.status(200).send({ result: user });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllLogins, checkLogin, updateLogin };
