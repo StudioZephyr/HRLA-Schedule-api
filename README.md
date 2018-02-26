@@ -27,3 +27,11 @@ List of all API endpoints and what to expect:
 * DELETE: response - ``` { result: str/obj } ```
   * SUCCESS: returns string indicating successful deletion
   * FAILURE: returns obj with error message and deleted boolean as false
+
+### '/signup'
+
+* POST: accepts - ``` { login, password, groupName, isNew, type } ``` | response - ``` { result: obj } ```
+  * SUCCESS: returns created User info obj
+  * FAILURE: return obj with error message and found, user boolean describing which one failed
+
+
