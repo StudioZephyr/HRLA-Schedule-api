@@ -39,4 +39,44 @@ const addContact = (contactObj, UserId) => {
   });
 };
 
-export { getAllContacts, addContact };
+const updateContact = (contactObj, id) => {
+  return new Promise((resolve, reject) => {
+    Contact.update(contactObj, {
+      where: { id }
+    })
+      .then(updated => {
+        if (updated[0] === 0) {
+          reject({
+            message: `No Contact was updated`,
+            updated: false,
+            contact: null,
+          });
+        } else {
+          Contact.findOne({
+            where: { id }
+          })
+            .then(contact => {
+              resolve(contact.dataValues);
+            })
+            .catch(err => {
+              console.log(`Error finding updated Contact. Error: ${err}`);
+              reject({
+                message: `Error finding updated Contact`,
+                updated: true,
+                contact: false,
+              });
+            });
+        }
+      })
+      .catch(err => {
+        console.log(`Error updating Contact. Error: ${err}`);
+        reject({
+          message: `Error updating Contact`,
+          updated: false,
+          contact: false,
+        });
+      });
+  });
+};
+
+export { getAllContacts, addContact, updateContact };
