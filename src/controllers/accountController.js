@@ -3,7 +3,8 @@ import {
   getPW,
   updateUser,
   deleteUser,
-  getSingleUser
+  getSingleUser,
+  createUser
 } from '../database/controllers/userController';
 
 import {
@@ -80,4 +81,14 @@ const getLogin = (req, res) => {
     });
 };
 
-export { getAllLogins, checkLogin, updateLogin, deleteLogin };
+const createLogin = (req, res) => {
+  createUser(req.body)
+    .then(user => {
+      res.status(201).send({ result: user });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllLogins, checkLogin, updateLogin, deleteLogin, createLogin };
