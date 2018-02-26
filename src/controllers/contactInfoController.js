@@ -1,5 +1,6 @@
 import {
-  getAllContacts
+  getAllContacts,
+  addContact
 } from '../database/controllers/contactController';
 
 const getContacts = (req, res) => {
@@ -12,4 +13,14 @@ const getContacts = (req, res) => {
     });
 };
 
-export { getContacts };
+const createContact = (req, res) => {
+  addContact(req.body, req.params.id)
+    .then(success => {
+      res.status(201).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getContacts, createContact };

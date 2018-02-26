@@ -10,7 +10,8 @@ import {
 } from './controllers/accountController';
 
 import {
-  getContacts
+  getContacts,
+  createContact
 } from './controllers/contactInfoController';
 
 const Router = express.Router();
@@ -28,6 +29,7 @@ Router.route('/signup')
   .post(createLogin);
 
 Router.route('contact/:id')
-  .get(getContacts);
+  .get(getContacts)
+  .post(createContact);
 
 export { Router };
