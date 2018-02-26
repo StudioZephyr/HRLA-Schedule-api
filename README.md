@@ -57,3 +57,21 @@ PARAM: CONTACT ID.
 * DELETE: response - ``` { result: str/obj } ```
   * SUCCESS: returns string indicating successful deletion
   * FAILURE: returns obj with error message and found/contact boolean describing which one failed
+
+### '/rooms'
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all rooms
+  * FAILURE: returns obj with error message and rooms boolean as false
+
+### '/room'
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all rooms including array of their timeslots
+  * FAILURE: returns obj with error message and rooms boolen as false
+
+* POST: accepts - ``` { name } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful creation of room
+  * FAILURE: returns obj with error message and room boolean as false
+
+
