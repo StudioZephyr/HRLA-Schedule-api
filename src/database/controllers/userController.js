@@ -109,4 +109,34 @@ const deleteUser = (id) => {
   });
 };
 
-export { getAllUsers, getPW, updateUser, deleteUser, getSingleUser };
+const createUser = (userObj) => {
+  return new Promise((resolve, reject) => {
+    User.create(userObj)
+      .then(() => {
+        User.findOne({
+          where: { login: userObj.login }
+        })
+          .then(user => {
+            resolve(user.dataValues);
+          })
+          .catch(err => {
+            console.log(`Error finding created User. Error: ${err}`);
+            reject({
+              message: `Error finding created User`,
+              found: false,
+              user: null,
+            });
+          });
+      })
+      .catch(err => {
+        console.log(`Error creating User. Error: ${err}`);
+        reject({
+          message: `Error creating User`,
+          found: null,
+          user: false,
+        });
+      });
+  });
+};
+
+export { getAllUsers, getPW, updateUser, deleteUser, getSingleUser, createUser };
