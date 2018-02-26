@@ -1,7 +1,8 @@
 import {
   getAllContacts,
   addContact,
-  updateContact
+  updateContact,
+  deleteContact
 } from '../database/controllers/contactController';
 
 const getContacts = (req, res) => {
@@ -34,4 +35,14 @@ const updateContactInfo = (req, res) => {
     });
 };
 
-export { getContacts, createContact, updateContactInfo };
+const deleteContactInfo = (req, res) => {
+  deleteContact(req.params.id)
+    .then(success => {
+      res.status(200).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getContacts, createContact, updateContactInfo, deleteContactInfo };

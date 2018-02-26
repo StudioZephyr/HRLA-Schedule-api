@@ -12,7 +12,8 @@ import {
 import {
   getContacts,
   createContact,
-  updateContactInfo
+  updateContactInfo,
+  deleteContactInfo
 } from './controllers/contactInfoController';
 
 const Router = express.Router();
@@ -32,6 +33,7 @@ Router.route('/signup')
 Router.route('contact/:id')
   .get(getContacts)
   .post(createContact)
-  .put(updateContactInfo);
+  .put(updateContactInfo)
+  .delete(deleteContactInfo);
 
 export { Router };
