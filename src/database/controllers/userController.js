@@ -86,4 +86,27 @@ const getSingleUser = (id) => {
   });
 };
 
-export { getAllUsers, getPW, updateUser };
+const deleteUser = (id) => {
+  return new Promise((resolve, reject) => {
+    User.destroy({ where: { id } })
+      .then(destroyed => {
+        if (destroyed !== 1) {
+          reject({
+            message: `Error finding User to delete`,
+            deleted: false,
+          });
+        } else {
+          resolve(`User Deleted`);
+        }
+      })
+      .catch(err => {
+        console.log(`Error deleting User. Error: ${err}`);
+        reject({
+          message: `Error deleting User`,
+          deleted: false,
+        });
+      });
+  });
+};
+
+export { getAllUsers, getPW, updateUser, deleteUser };
