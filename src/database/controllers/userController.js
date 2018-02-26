@@ -22,4 +22,21 @@ const getAllUsers = () => {
   });
 };
 
-export { getAllUsers };
+const getPW = (login) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ where: { login } })
+      .then(user => {
+        resolve(user);
+      })
+      .catch(err => {
+        console.log(`Error finding Login. Error: ${err}`);
+        reject({
+          message: `Error finding Login`,
+          login: false,
+          password: null,
+        });
+      });
+  });
+};
+
+export { getAllUsers, getPW };
