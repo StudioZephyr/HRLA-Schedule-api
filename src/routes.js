@@ -16,6 +16,10 @@ import {
   deleteContactInfo
 } from './controllers/contactInfoController';
 
+import {
+  getAllRooms
+} from './controllers/roomController';
+
 const Router = express.Router();
 
 Router.route('/login')
@@ -35,5 +39,8 @@ Router.route('contact/:id')
   .post(createContact)
   .put(updateContactInfo)
   .delete(deleteContactInfo);
+
+Router.route('/rooms')
+  .get(getAllRooms);
 
 export { Router };
