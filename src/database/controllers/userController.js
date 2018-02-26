@@ -51,13 +51,35 @@ const updateUser = (userObj, id) => {
             user: false,
           });
         } else {
-          resolve(updated[1]);
+          getSingleUser(id)
+            .then(user => {
+              resolve(user);
+            })
+            .catch(err => {
+              reject(err);
+            });
         }
       })
       .catch(err => {
         console.log(`Error updating User. Error: ${err}`);
         reject({
           message: `Error updating User`,
+          user: false,
+        });
+      });
+  });
+};
+
+const getSingleUser = (id) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ where: { id } })
+      .then(user => {
+        resolve(user.dataValues);
+      })
+      .catch(err => {
+        console.log(`Error finding User. Error: ${err}`);
+        reject({
+          message: `Error finding User`,
           user: false,
         });
       });
