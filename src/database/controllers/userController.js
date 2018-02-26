@@ -39,4 +39,29 @@ const getPW = (login) => {
   });
 };
 
-export { getAllUsers, getPW };
+const updateUser = (userObj, id) => {
+  return new Promise((resolve, reject) => {
+    User.update(userObj, {
+      where: { id }
+    })
+      .then(updated => {
+        if (updated[0] === 0) {
+          reject({
+            message: `Error finding User`,
+            user: false,
+          });
+        } else {
+          resolve(updated[1]);
+        }
+      })
+      .catch(err => {
+        console.log(`Error updating User. Error: ${err}`);
+        reject({
+          message: `Error updating User`,
+          user: false,
+        });
+      });
+  });
+};
+
+export { getAllUsers, getPW, updateUser };
