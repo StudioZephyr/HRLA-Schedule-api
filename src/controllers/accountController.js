@@ -2,7 +2,8 @@ import {
   getAllUsers,
   getPW,
   updateUser,
-  deleteUser
+  deleteUser,
+  getSingleUser
 } from '../database/controllers/userController';
 
 import {
@@ -65,7 +66,17 @@ const deleteLogin = (req, res) => {
       res.status(200).send({ result: success });
     })
     .catch(err => {
-      res.status(500).send(err);
+      res.status(500).send({ result: err });
+    });
+};
+
+const getLogin = (req, res) => {
+  getSingleUser(req.params.id)
+    .then(user => {
+      res.status(200).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
     });
 };
 

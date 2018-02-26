@@ -4,7 +4,8 @@ import {
   getAllLogins,
   checkLogin,
   updateLogin,
-  deleteLogin
+  deleteLogin,
+  getLogin
 } from './controllers/accountController';
 
 const Router = express.Router();
@@ -14,6 +15,7 @@ Router.route('/login')
   .post(checkLogin);
 
 Router.route('/login/:id')
+  .get(getLogin)
   .put(updateLogin)
   .delete(deleteLogin);
 
