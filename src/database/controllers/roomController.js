@@ -63,4 +63,29 @@ const updateRoom = (roomObj, id) => {
   });
 };
 
-export { getRooms, addRoom, updateRoom };
+const removeRoom = (id) => {
+  return new Promise((resolve, reject) => {
+    Room.destroy({
+      where: { id }
+    })
+      .then(deleted => {
+        if (deleted === 0) {
+          reject({
+            message: `Room not found`,
+            deleted: false,
+          });
+        } else {
+          resolve('Room Deleted');
+        }
+      })
+      .catch(err => {
+        console.log(`Error deleting Room. Error: ${err}`);
+        reject({
+          message: `Error deleting Room`,
+          deleted: false,
+        });
+      });
+  });
+};
+
+export { getRooms, addRoom, updateRoom, removeRoom };
