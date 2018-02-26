@@ -3,7 +3,8 @@ import express from 'express';
 import {
   getAllLogins,
   checkLogin,
-  updateLogin
+  updateLogin,
+  deleteLogin
 } from './controllers/accountController';
 
 const Router = express.Router();
@@ -13,6 +14,7 @@ Router.route('/login')
   .post(checkLogin);
 
 Router.route('/login/:id')
-  .put(updateLogin);
+  .put(updateLogin)
+  .delete(deleteLogin);
 
 export { Router };
