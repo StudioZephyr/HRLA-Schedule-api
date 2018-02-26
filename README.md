@@ -74,4 +74,14 @@ PARAM: CONTACT ID.
   * SUCCESS: returns string indicating successful creation of room
   * FAILURE: returns obj with error message and room boolean as false
 
+### 'room/:id'
 
+PARAM: ROOM ID.
+
+* PUT: accepts - ``` { name } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful update
+  * FAILURE: returns obj with error message and updated boolean as false
+
+* DELETE: response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful deletion
+  * FAILURE: returns obj with error message and deleted boolean as false
