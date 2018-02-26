@@ -38,4 +38,29 @@ const addRoom = (roomObj) => {
   });
 };
 
-export { getRooms, addRoom };
+const updateRoom = (roomObj, id) => {
+  return new Promise((resolve, reject) => {
+    Room.update(roomObj, {
+      where: { id }
+    })
+      .then(updated => {
+        if (updated[0] === 0) {
+          reject({
+            message: `Room not found`,
+            update: false,
+          });
+        } else {
+          resolve('Room Updated');
+        }
+      })
+      .catch(err => {
+        console.log(`Error updating Room. Error: ${err}`);
+        reject({
+          message: `Error updating Room`,
+          update: false,
+        });
+      });
+  });
+};
+
+export { getRooms, addRoom, updateRoom };
