@@ -1,7 +1,8 @@
 import {
   getRooms,
   addRoom,
-  updateRoom
+  updateRoom,
+  removeRoom
 } from '../database/controllers/roomController';
 
 import {
@@ -63,4 +64,14 @@ const updateRoomName = (req, res) => {
     });
 };
 
-export { getAllRooms, getAllRoomTimeslots, createRoom, updateRoomName };
+const deleteRoom = (req, res) => {
+  removeRoom(req.params.id)
+    .then(success => {
+      res.status(200).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllRooms, getAllRoomTimeslots, createRoom, updateRoomName, deleteRoom };
