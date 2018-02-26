@@ -1,5 +1,6 @@
 import {
-  getRooms
+  getRooms,
+  addRoom
 } from '../database/controllers/roomController';
 
 import {
@@ -41,4 +42,14 @@ const getAllRoomTimeslots = (req, res) => {
     });
 };
 
-export { getAllRooms, getAllRoomTimeslots };
+const createRoom = (req, res) => {
+  addRoom(req.body)
+    .then(success => {
+      res.status(201).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllRooms, getAllRoomTimeslots, createRoom };

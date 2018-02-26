@@ -18,7 +18,8 @@ import {
 
 import {
   getAllRooms,
-  getAllRoomTimeslots
+  getAllRoomTimeslots,
+  createRoom
 } from './controllers/roomController';
 
 const Router = express.Router();
@@ -45,6 +46,7 @@ Router.route('/rooms')
   .get(getAllRooms);
 
 Router.route('/room')
-  .get(getAllRoomTimeslots);
+  .get(getAllRoomTimeslots)
+  .post(createRoom);
 
 export { Router };
