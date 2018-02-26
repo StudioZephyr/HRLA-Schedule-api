@@ -1,5 +1,6 @@
 import { 
-  getAllUsers 
+  getAllUsers,
+  getPW
 } from '../database/controllers/userController';
 
 import {
@@ -23,8 +24,27 @@ const getAllLogins = (req, res) => {
       res.status(200).send({ result: userObj });
     })
     .catch(err => {
-      res.status(500).send({ error: err });
+      res.status(500).send({ result: err });
     });
 };
 
-export { getAllLogins };
+const checkLogin = (req, res) => {
+  getPW(req.body.login)
+    .then(user => {
+      if (user.password !== req.body.password) {
+        const result = {
+          message: 'Incorrect PW',
+          login: true,
+          password: false,
+        };
+        res.status(500).send({ result });
+      } else {
+        res.status(200).send({ result: user });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllLogins, checkLogin };
