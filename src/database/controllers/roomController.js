@@ -22,4 +22,20 @@ const getRooms = () => {
   });
 };
 
-export { getRooms };
+const addRoom = (roomObj) => {
+  return new Promise((resolve, reject) => {
+    Room.create(roomObj)
+      .then(() => {
+        resolve(`Room Created`);
+      })
+      .catch(err => {
+        console.log(`Error creating Room. Error: ${err}`);
+        reject({
+          message: `Error creating Room`,
+          room: false,
+        });
+      });
+  });
+};
+
+export { getRooms, addRoom };
