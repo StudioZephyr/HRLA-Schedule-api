@@ -9,6 +9,10 @@ import {
   createLogin
 } from './controllers/accountController';
 
+import {
+  getContacts
+} from './controllers/contactInfoController';
+
 const Router = express.Router();
 
 Router.route('/login')
@@ -22,5 +26,8 @@ Router.route('/login/:id')
 
 Router.route('/signup')
   .post(createLogin);
+
+Router.route('contact/:id')
+  .get(getContacts);
 
 export { Router };
