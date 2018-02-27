@@ -89,11 +89,27 @@ PARAM: ROOM ID.
 ### '/timeslot'
 
 * GET: response - ``` { result: obj } ```
-  * SUCCESS: returns array of all Timeslots
+  * SUCCESS: returns array of all active Timeslots
   * FAILURE: returns obj with error message and timeslot boolean as false
 
 * POST: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
   * SUCCESS: returns string indicating successful creation
   * FAILURE: returns obj with error message and timeslot boolean as false
 
+### '/timeslot/:id'
 
+PARAM: USER ID.
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all active Timeslots for single User Id
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+PARAM: TIMESLOT ID.
+
+* PUT: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful update
+  * FAILURE: returns obj with error message and updated boolean as false
+
+* DELETE: response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful deletion
+  * FAILURE: returns obj with error message and deleted boolean as false
