@@ -26,4 +26,26 @@ const getTimeslots = (id) => {
   });
 };
 
-export { getTimeslots };
+const findAllTimeslots = () => {
+  return new Promise((resolve, reject) => {
+    Timeslot.findAll({
+      where: { finished: false }
+    })
+      .then(timeslots => {
+        const timeslotArr = [];
+        for (let i = 0; i < timeslots.length; i++) {
+          timeslotData.push(timeslots[i].dataValues);
+        }
+        resolve(timeslotArr);
+      })
+      .catch(err => {
+        console.log(`Error finding all Timeslots. Error: ${err}`);
+        reject({
+          message: `Error finding Timeslots`,
+          timeslots: false,
+        });
+      });
+  });
+};
+
+export { getTimeslots, findAllTimeslots };
