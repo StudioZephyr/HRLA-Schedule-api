@@ -24,6 +24,10 @@ import {
   deleteRoom
 } from './controllers/roomController';
 
+import {
+  getAllTimeslots
+} from './controllers/timeslotController';
+
 const Router = express.Router();
 
 Router.route('/login')
@@ -54,5 +58,8 @@ Router.route('/room')
 Router.route('/room/:id')
   .put(updateRoomName)
   .delete(deleteRoom);
+
+Router.route('/timeslot')
+  .get(getAllTimeslots);
 
 export { Router };
