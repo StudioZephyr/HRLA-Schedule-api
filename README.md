@@ -1,5 +1,24 @@
 # HRLA-Scheduler-api
 
+## Start up
+
+Create new ``` .env ``` and copy contents of ``` sample.env ```.
+Fill in as necessary.
+Use DEV_DB_URL during development.
+(ElephantSQL is recommended).
+
+Install dependencies:
+```
+npm install
+or
+yarn install
+```
+
+Use following script to start dev :
+```
+npm run start-dev
+```
+
 ## Database Models + Attributes
 
 Example: 
