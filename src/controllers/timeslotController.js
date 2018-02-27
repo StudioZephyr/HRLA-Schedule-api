@@ -1,7 +1,8 @@
 import {
   findAllTimeslots,
   addTimeslot,
-  findAllUserTimeslots
+  findAllUserTimeslots,
+  updateTimeslot
 } from '../database/controllers/timeslotController';
 
 const getAllTimeslots = (req, res) => {
@@ -17,7 +18,7 @@ const getAllTimeslots = (req, res) => {
 const createTimeslot = (req, res) => {
   addTimeslot(req.body)
     .then(success => {
-      res.status(200).send({ result: success });
+      res.status(201).send({ result: success });
     })
     .catch(err => {
       res.status(500).send({ result: err });
@@ -34,4 +35,14 @@ const getUserTimeslot = (req, res) => {
     });
 };
 
-export { getAllTimeslots, createTimeslot, getUserTimeslot };
+const updateTimeslotInfo = (req, res) => {
+  updateTimeslot(req.body, req.params.id)
+    .then(success => {
+      res.status(200).send({ result: success });
+    })
+    .catch(err => {
+      res.status(500).send({ result: err });
+    });
+};
+
+export { getAllTimeslots, createTimeslot, getUserTimeslot, updateTimeslotInfo };
