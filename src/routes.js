@@ -28,7 +28,8 @@ import {
   getAllTimeslots,
   createTimeslot,
   getUserTimeslot,
-  updateTimeslotInfo
+  updateTimeslotInfo,
+  deleteTimeslot
 } from './controllers/timeslotController';
 
 const Router = express.Router();
@@ -68,6 +69,7 @@ Router.route('/timeslot')
 
 Router.route('/timeslot/:id')
   .get(getUserTimeslot)
-  .put(updateTimeslotInfo);
+  .put(updateTimeslotInfo)
+  .delete(deleteTimeslot);
 
 export { Router };
