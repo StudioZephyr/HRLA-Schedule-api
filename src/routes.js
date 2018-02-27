@@ -26,7 +26,8 @@ import {
 
 import {
   getAllTimeslots,
-  createTimeslot
+  createTimeslot,
+  getUserTimeslot
 } from './controllers/timeslotController';
 
 const Router = express.Router();
@@ -63,5 +64,8 @@ Router.route('/room/:id')
 Router.route('/timeslot')
   .get(getAllTimeslots)
   .post(createTimeslot);
+
+Router.route('/timeslot/:id')
+  .get(getUserTimeslot);
 
 export { Router };
