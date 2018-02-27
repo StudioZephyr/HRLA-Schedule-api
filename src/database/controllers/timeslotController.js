@@ -64,4 +64,29 @@ const addTimeslot = (timeslotObj) => {
   });
 };
 
-export { getTimeslots, findAllTimeslots, addTimeslot };
+const findAllUserTimeslots = (id) => {
+  return new Promise((resolve, reject) => {
+    Timeslot.findAll({
+      where: {
+        UserId: id,
+        finished: false,
+      }
+    })
+      .then(timeslots => {
+        const timeslotArr = [];
+        for (let i = 0; i < timeslots.length; i++) {
+          timeslotArr.push(timeslots[i].dataValues);
+        }
+        resolve(timeslotArr);
+      })
+      .catch(err => {
+        console.log(`Error finding all User Timeslots. Error: ${err}`);
+        reject({
+          message: `Error finding all User Timeslots`,
+          timeslot: false,
+        });
+      });
+  });
+};
+
+export { getTimeslots, findAllTimeslots, addTimeslot, findAllUserTimeslots };
