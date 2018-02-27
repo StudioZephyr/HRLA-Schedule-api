@@ -1,5 +1,38 @@
 # HRLA-Scheduler-api
 
+## Database Models + Attributes
+
+Example: 
+```
+### MODEL NAME
+
+* Attribute Name: data type & (additional information)
+```
+
+### USER
+
+* type: String & Cannot be null
+* login: String & Cannot be null
+* password: String & Cannot be null
+* groupName: String & Can be null
+* isNew: Boolean & Cannot be null (Default: true)
+
+### CONTACT
+
+* name: String & Cannot be null
+* email: String & Cannot be null
+
+### ROOM
+
+* name: String & Cannot be null
+
+### TIMESLOT
+
+* title: String & Cannot be null
+* start: Date & Cannot be null
+* end: Date & Cannot be null
+* finished: Boolean & Cannot be null (Default: false)
+
 ## API Routes + Responses
 
 List of all API endpoints and what to expect:
