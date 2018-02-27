@@ -6,7 +6,6 @@
     "start": "node bin/entry.js production",
     "start-dev": "nodemon bin/entry.js"
   },
-  "keywords": [],
   "author": "Gabriel Katz, Daniel Chong",
   "license": "ISC",
   "dependencies": {
