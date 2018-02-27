@@ -114,4 +114,29 @@ const updateTimeslot = (timeslotObj, id) => {
   });
 };
 
-export { getTimeslots, findAllTimeslots, addTimeslot, findAllUserTimeslots, updateTimeslot };
+const removeTimeslot = (id) => {
+  return new Promise((resolve, reject) => {
+    Timeslot.destroy({
+      where: { id }
+    })
+      .then(deleted => {
+        if (deleted === 0) {
+          reject({
+            message: `Timeslot to delete not found`,
+            deleted: false,
+          });
+        } else {
+          resolve(`Timeslot Deleted`);
+        }
+      })
+      .catch(err => {
+        console.log(`Error deleting Timeslot. Error: ${err}`);
+        reject({
+          message: `Error deleting Timeslot`,
+          deleted: false,
+        });
+      });
+  });
+};
+
+export { getTimeslots, findAllTimeslots, addTimeslot, findAllUserTimeslots, updateTimeslot, removeTimeslot };
