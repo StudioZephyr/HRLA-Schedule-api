@@ -91,4 +91,4 @@ const createLogin = (req, res) => {
     });
 };
 
-export { getAllLogins, checkLogin, updateLogin, deleteLogin, createLogin };
+export { getAllLogins, checkLogin, updateLogin, deleteLogin, getLogin, createLogin };
