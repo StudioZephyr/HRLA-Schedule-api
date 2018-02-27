@@ -89,4 +89,29 @@ const findAllUserTimeslots = (id) => {
   });
 };
 
-export { getTimeslots, findAllTimeslots, addTimeslot, findAllUserTimeslots };
+const updateTimeslot = (timeslotObj, id) => {
+  return new Promise((resolve, reject) => {
+    Timeslot.update(timeObj, {
+      where: { id }
+    })
+      .then(updated => {
+        if (updated[0] === 0) {
+          reject({
+            message: `Timeslot to update not found`,
+            updated: false,
+          });
+        } else {
+          resolve(`Timeslot Updated`);
+        }
+      })
+      .catch(err => {
+        console.log(`Error updating Timeslot. Error: ${err}`);
+        reject({
+          message: `Error updating Timeslot`,
+          updated: false,
+        });
+      });
+  });
+};
+
+export { getTimeslots, findAllTimeslots, addTimeslot, findAllUserTimeslots, updateTimeslot };
