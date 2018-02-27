@@ -48,4 +48,20 @@ const findAllTimeslots = () => {
   });
 };
 
-export { getTimeslots, findAllTimeslots };
+const addTimeslot = (timeslotObj) => {
+  return new Promise((resolve, reject) => {
+    Timeslot.create(timeslotObj)
+      .then(() => {
+        resolve(`Timeslot Created`);
+      })
+      .catch(err => {
+        console.log(`Error creating Timeslot`);
+        reject({
+          message: `Error creating Timeslot`,
+          timeslot: false,
+        });
+      });
+  });
+};
+
+export { getTimeslots, findAllTimeslots, addTimeslot };
