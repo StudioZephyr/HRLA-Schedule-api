@@ -74,7 +74,7 @@ PARAM: CONTACT ID.
   * SUCCESS: returns string indicating successful creation of room
   * FAILURE: returns obj with error message and room boolean as false
 
-### 'room/:id'
+### '/room/:id'
 
 PARAM: ROOM ID.
 
@@ -85,3 +85,15 @@ PARAM: ROOM ID.
 * DELETE: response - ``` { result: str/obj } ```
   * SUCCESS: returns string indicating successful deletion
   * FAILURE: returns obj with error message and deleted boolean as false
+
+### '/timeslot'
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all Timeslots
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+* POST: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful creation
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+
