@@ -1,5 +1,57 @@
 # HRLA-Scheduler-api
 
+## Start up
+
+Create new ``` .env ``` and copy contents of ``` sample.env ```.
+Fill in as necessary.
+Use DEV_DB_URL during development.
+(ElephantSQL is recommended).
+
+Install dependencies:
+```
+npm install
+or
+yarn install
+```
+
+Use following script to start dev :
+```
+npm run start-dev
+```
+
+## Database Models + Attributes
+
+Example: 
+```
+### MODEL NAME
+
+* Attribute Name: data type & (additional information)
+```
+
+### USER
+
+* type: String & Cannot be null
+* login: String & Cannot be null
+* password: String & Cannot be null
+* groupName: String & Can be null
+* isNew: Boolean & Cannot be null (Default: true)
+
+### CONTACT
+
+* name: String & Cannot be null
+* email: String & Cannot be null
+
+### ROOM
+
+* name: String & Cannot be null
+
+### TIMESLOT
+
+* title: String & Cannot be null
+* start: Date & Cannot be null
+* end: Date & Cannot be null
+* finished: Boolean & Cannot be null (Default: false)
+
 ## API Routes + Responses
 
 List of all API endpoints and what to expect:
@@ -74,11 +126,39 @@ PARAM: CONTACT ID.
   * SUCCESS: returns string indicating successful creation of room
   * FAILURE: returns obj with error message and room boolean as false
 
-### 'room/:id'
+### '/room/:id'
 
 PARAM: ROOM ID.
 
 * PUT: accepts - ``` { name } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful update
+  * FAILURE: returns obj with error message and updated boolean as false
+
+* DELETE: response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful deletion
+  * FAILURE: returns obj with error message and deleted boolean as false
+
+### '/timeslot'
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all active Timeslots
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+* POST: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns string indicating successful creation
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+### '/timeslot/:id'
+
+PARAM: USER ID.
+
+* GET: response - ``` { result: obj } ```
+  * SUCCESS: returns array of all active Timeslots for single User Id
+  * FAILURE: returns obj with error message and timeslot boolean as false
+
+PARAM: TIMESLOT ID.
+
+* PUT: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
   * SUCCESS: returns string indicating successful update
   * FAILURE: returns obj with error message and updated boolean as false
 
