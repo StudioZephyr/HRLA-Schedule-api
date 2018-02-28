@@ -4,7 +4,8 @@
   "description": "RESTful API for HRLA Scheduler",
   "scripts": {
     "start": "node bin/entry.js production",
-    "start-dev": "nodemon bin/entry.js"
+    "start-dev": "nodemon bin/entry.js",
+    "seed": "node bin/seed.js"
   },
   "author": "Gabriel Katz, Daniel Chong",
   "license": "ISC",
