@@ -19,6 +19,24 @@ Use following script to start dev :
 npm run start-dev
 ```
 
+## Seeding Data
+
+Make sure the tables have already been synced once, by running the server, or run ``` npm run seed drop ```.
+
+Seed script:
+```
+npm run seed
+```
+
+The script takes in the following commands:
+* all: seeds all basic data (not including any timeslots)
+* drop: drops and re-syncs all tables
+* user: seeds all basic user table data
+* room: seeds all basic room table data
+* contact: seeds all basic contact table data
+
+You can pass in multiple commands as needed.
+
 ## Database Models + Attributes
 
 Example: 
