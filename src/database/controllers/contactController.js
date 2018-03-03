@@ -85,7 +85,7 @@ const deleteContact = (id) => {
       where: { id }
     })
       .then(destroyed => {
-        if (destroyed !== 0) {
+        if (destroyed === 0) {
           reject({
             message: `Error finding Contact to delete`,
             found: false,
