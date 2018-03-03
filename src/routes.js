@@ -46,7 +46,7 @@ Router.route('/login/:id')
 Router.route('/signup')
   .post(createLogin);
 
-Router.route('contact/:id')
+Router.route('/contact/:id')
   .get(getContacts)
   .post(createContact)
   .put(updateContactInfo)

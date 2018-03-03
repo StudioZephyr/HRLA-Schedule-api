@@ -8,7 +8,7 @@ const getAllContacts = (id) => {
       .then(contacts => {
         const contactArr = [];
         for (let i = 0; i < contacts.length; i++) {
-          contactList.push(contacts[i].dataValues);
+          contactArr.push(contacts[i].dataValues);
         }
         resolve(contactArr);
       })
