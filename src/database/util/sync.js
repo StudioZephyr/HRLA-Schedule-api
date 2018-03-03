@@ -7,7 +7,8 @@ import { Contact } from '../model/contact';
 import { log } from '../../util/logger';
 
 const syncDB = (
-  bool=false
+  bool=false,
+  resolve
 ) => {
   db.authenticate()
     .then(() => {
@@ -28,6 +29,9 @@ const syncDB = (
               Timeslot.sync({ force: bool })
                 .then(() => {
                   log(`Timeslot table synced`);
+                  if (resolve) {
+                    resolve();
+                  }
                 })
                 .catch(err => {
                   log(`Error syncing Timeslot table. Error: ${err.message}`);
