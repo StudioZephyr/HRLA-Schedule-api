@@ -18,14 +18,14 @@ const getAllLogins = (req, res) => {
       for (let i = 0; i < users.length; i++) {
         await getAllContacts(users[i].id)
           .then(contact => {
-            users[i].contacts = data;
-            userObj.push(users[i]);
+            users[i].contacts = contact;
+            userArr.push(users[i]);
           })
           .catch(err => {
             console.log(`Error: ${err.message}`);
           });
       }
-      res.status(200).send({ result: userObj });
+      res.status(200).send({ result: userArr });
     })
     .catch(err => {
       res.status(500).send({ result: err });
