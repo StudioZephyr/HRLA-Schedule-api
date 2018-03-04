@@ -8,14 +8,15 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const { seedUsers, seedContacts, seedRooms, dropTables } = require('../src/database/util/seeder');
+const { seedUsers, seedContacts, seedRooms, seedTimeslots, dropTables } = require('../src/database/util/seeder');
 
 const seedAll = () => {
   return new Promise(async (resolve, reject) => {
-    await seedUsers()
+    await seedUsers();
     await seedRooms();
     await seedContacts();
-    resolve() 
+    await seedTimeslots();
+    resolve();
   })
 };
 
