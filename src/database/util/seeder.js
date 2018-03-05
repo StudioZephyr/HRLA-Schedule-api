@@ -4,8 +4,10 @@ import { db } from '../index';
 import { User } from '../model/user';
 import { Room } from '../model/room';
 import { Contact } from '../model/contact';
+import { Timeslot } from '../model/timeslot';
 
 import { syncDB } from './sync';
+import { endianness } from 'os';
 
 const userData = [
   {
@@ -57,6 +59,35 @@ const adminContactData = [
   }
 ];
 
+const timeslots = [
+  {
+    title: 'test 1',
+    start: new Date(2018, 2, 5, 13, 0, 0),
+    end: new Date(2018, 2, 5, 14, 0, 0),
+    finished: false,
+  },
+  {
+    title: 'test 2',
+    start: new Date(2018, 2, 5, 14, 0, 0),
+    end: new Date(2018, 2, 5, 15, 30, 0),
+    finished: false,
+  },
+  {
+    title: 'test 3',
+    start: new Date(2018, 2, 5, 15, 0, 0),
+    end: new Date(2018, 2, 5, 17, 0, 0),
+    finished: false,
+  },
+  {
+    title: 'test 4',
+    start: new Date(2018, 2, 5, 17, 0, 0),
+    end: new Date(2018, 2, 5, 20, 0, 0),
+    finished: false,
+  }
+
+
+]
+
 const seedUsers = () => {
   return new Promise((resolve, reject) => {
     for (let i = 0; i < userData.length; i++) {
@@ -81,7 +112,7 @@ const seedRooms = () => {
       Room.create(roomData[i])
         .then(() => {
           console.log(`Room, ${roomData[i].name}, has been created!`);
-          resolve()
+          resolve();
         })
         .catch(err => {
           console.log(`Error adding Room, ${roomData[i].name}!`);
@@ -91,18 +122,17 @@ const seedRooms = () => {
 };
 
 const seedContacts = () => {
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
     User.findOne({
       where: { type: 'admin' }
     })
       .then((user) => {
-        console.log('checking user:', user)
         for (let i = 0; i < adminContactData.length; i++) {
           adminContactData[i].UserId = user.dataValues.id;
           Contact.create(adminContactData[i])
             .then(() => {
               console.log(`Contact, ${adminContactData[i].name}, has been created!`);
-              resolve()
+              resolve();
             })
             .catch(err => {
               console.log(`Error adding Contact, ${adminContactData[i].name}!`);
@@ -115,8 +145,37 @@ const seedContacts = () => {
   })
 };
 
+const seedTimeslots = () => {
+  return new Promise((resolve, reject) => {
+    User.findOne({
+      where: { type: 'admin' }
+    })
+      .then((user) => {
+        for (let i = 0; i < timeslots.length; i++) {
+          let roomIdx = i;
+          if (!roomData[i]) {
+            roomIdx = 0;
+          }
+          Room.findOne({
+            where: { name: roomData[roomIdx].name }
+          })
+            .then(async (room) => {
+              timeslots[i].UserId = user.dataValues.id;
+              timeslots[i].RoomId = room.dataValues.id;
+              await Timeslot.create(timeslots[i])
+              console.log(`Timeslot, ${timeslots[i].title}, has been created!`);
+              if (i === roomData.length - 1) {
+                resolve();
+              }
+
+            })
+        }
+      })
+  })
+}
+
 const dropTables = () => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     db.drop({ cascade: true })
       .then(() => {
         console.log(`All data has been dropped!`);
@@ -124,9 +183,9 @@ const dropTables = () => {
       })
       .catch(err => {
         console.log(`Error dropping all tables!`);
-        reject(err);  
+        reject(err);
       });
   })
 };
 
-export { seedUsers, seedRooms, seedContacts, dropTables };
+export { seedUsers, seedRooms, seedContacts, seedTimeslots, dropTables };
