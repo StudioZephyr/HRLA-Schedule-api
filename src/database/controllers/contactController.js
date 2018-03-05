@@ -8,7 +8,7 @@ const getAllContacts = (id) => {
       .then(contacts => {
         const contactArr = [];
         for (let i = 0; i < contacts.length; i++) {
-          contactList.push(contacts[i].dataValues);
+          contactArr.push(contacts[i].dataValues);
         }
         resolve(contactArr);
       })
@@ -85,7 +85,7 @@ const deleteContact = (id) => {
       where: { id }
     })
       .then(destroyed => {
-        if (destroyed !== 0) {
+        if (destroyed === 0) {
           reject({
             message: `Error finding Contact to delete`,
             found: false,
