@@ -34,7 +34,7 @@ const findAllTimeslots = () => {
       .then(timeslots => {
         const timeslotArr = [];
         for (let i = 0; i < timeslots.length; i++) {
-          timeslotData.push(timeslots[i].dataValues);
+          timeslotArr.push(timeslots[i].dataValues);
         }
         resolve(timeslotArr);
       })

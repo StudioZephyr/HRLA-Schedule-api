@@ -59,30 +59,30 @@ const adminContactData = [
   }
 ];
 
-const timeslots =[
+const timeslots = [
   {
     title: 'test 1',
     start: new Date(2018, 2, 5, 13, 0, 0),
     end: new Date(2018, 2, 5, 14, 0, 0),
-    finished: true,
+    finished: false,
   },
   {
     title: 'test 2',
     start: new Date(2018, 2, 5, 14, 0, 0),
     end: new Date(2018, 2, 5, 15, 30, 0),
-    finished: true,
+    finished: false,
   },
   {
     title: 'test 3',
     start: new Date(2018, 2, 5, 15, 0, 0),
     end: new Date(2018, 2, 5, 17, 0, 0),
-    finished: true,
+    finished: false,
   },
   {
     title: 'test 4',
     start: new Date(2018, 2, 5, 17, 0, 0),
     end: new Date(2018, 2, 5, 20, 0, 0),
-    finished: true,
+    finished: false,
   }
 
 
@@ -122,7 +122,7 @@ const seedRooms = () => {
 };
 
 const seedContacts = () => {
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
     User.findOne({
       where: { type: 'admin' }
     })
@@ -153,28 +153,29 @@ const seedTimeslots = () => {
       .then((user) => {
         for (let i = 0; i < timeslots.length; i++) {
           let roomIdx = i;
-          if (!roomData[i]){
+          if (!roomData[i]) {
             roomIdx = 0;
           }
           Room.findOne({
-          where: {name: roomData[roomIdx].name}
-        })
-        .then((room)=> {
-          timeslots[i].UserId = user.dataValues.id;
-          timeslots[i].RoomId = room.dataValues.id;
-          Timeslot.create(timeslots[i])
-          .then(() => {
-            console.log(`Timeslot, ${timeslots[i].title}, has been created!`);
-            resolve();
+            where: { name: roomData[roomIdx].name }
           })
-        })
+            .then(async (room) => {
+              timeslots[i].UserId = user.dataValues.id;
+              timeslots[i].RoomId = room.dataValues.id;
+              await Timeslot.create(timeslots[i])
+              console.log(`Timeslot, ${timeslots[i].title}, has been created!`);
+              if (i === roomData.length - 1) {
+                resolve();
+              }
+
+            })
         }
       })
   })
 }
 
 const dropTables = () => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     db.drop({ cascade: true })
       .then(() => {
         console.log(`All data has been dropped!`);
@@ -182,7 +183,7 @@ const dropTables = () => {
       })
       .catch(err => {
         console.log(`Error dropping all tables!`);
-        reject(err);  
+        reject(err);
       });
   })
 };
