@@ -7,4 +7,5 @@ const DB_URL =
 
 const db = new Sequelize(DB_URL);
 
+
 export { db };

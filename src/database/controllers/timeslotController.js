@@ -1,11 +1,13 @@
 import Promise from 'bluebird';
 
 import { Timeslot } from '../model/timeslot';
+import { User } from '../model/user';
+import { Room } from '../model/room';
 
 const getTimeslots = (id) => {
   return new Promise((resolve, reject) => {
     Timeslot.findAll({
-      where: { 
+      where: {
         RoomId: id,
         finished: false,
       }
@@ -49,18 +51,33 @@ const findAllTimeslots = () => {
 };
 
 const addTimeslot = (timeslotObj) => {
-  return new Promise((resolve, reject) => {
-    Timeslot.create(timeslotObj)
-      .then(() => {
-        resolve(`Timeslot Created`);
+  return new Promise(async (resolve, reject) => {
+    User.findOne({
+      attributes: ['id'],
+      where: { groupName: timeslotObj.username }
+    })
+      .then(({ id }) => {
+        timeslotObj.UserId = id;
+        Room.findOne({
+          attributes: ['id'],
+          where: { name: timeslotObj.room }
+        })
+          .then(({ id }) => {
+            timeslotObj.RoomId = id;
+
+            Timeslot.create(timeslotObj)
+              .then(() => {
+                resolve(`Timeslot Created`);
+              })
+              .catch(err => {
+                console.log(`Error creating Timeslot`);
+                reject({
+                  message: `Error creating Timeslot`,
+                  timeslot: false,
+                });
+              });
+          })
       })
-      .catch(err => {
-        console.log(`Error creating Timeslot`);
-        reject({
-          message: `Error creating Timeslot`,
-          timeslot: false,
-        });
-      });
   });
 };
 
