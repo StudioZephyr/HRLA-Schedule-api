@@ -108,7 +108,8 @@ const findAllUserTimeslots = (id) => {
 
 const updateTimeslot = (timeslotObj, id) => {
   return new Promise((resolve, reject) => {
-    Timeslot.update(timeObj, {
+    console.log('should be updating with id of ', id, 'and obj looks like ', timeslotObj);
+    Timeslot.update(timeslotObj, {
       where: { id }
     })
       .then(updated => {
