@@ -66,8 +66,8 @@ const addTimeslot = (timeslotObj) => {
             timeslotObj.RoomId = id;
 
             Timeslot.create(timeslotObj)
-              .then(() => {
-                resolve(`Timeslot Created`);
+              .then((result) => {
+                resolve(result);
               })
               .catch(err => {
                 console.log(`Error creating Timeslot`);
