@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+import moment from 'moment';
 
 import { Timeslot } from '../model/timeslot';
 import { User } from '../model/user';
@@ -51,33 +52,52 @@ const findAllTimeslots = () => {
 };
 
 const addTimeslot = (timeslotObj) => {
-  return new Promise(async (resolve, reject) => {
-    User.findOne({
+  return new Promise((resolve, reject) => {
+    Room.findOne({
       attributes: ['id'],
-      where: { groupName: timeslotObj.username }
+      where: { name: timeslotObj.room }
     })
       .then(({ id }) => {
-        timeslotObj.UserId = id;
-        Room.findOne({
-          attributes: ['id'],
-          where: { name: timeslotObj.room }
+        let roomId = id
+        Timeslot.findAll({
+          where: { RoomId: id }
         })
-          .then(({ id }) => {
-            timeslotObj.RoomId = id;
-
-            Timeslot.create(timeslotObj)
-              .then((result) => {
-                resolve(result);
+          .then((eventList) => {
+            let start = moment(timeslotObj.start);
+            let end = moment(timeslotObj.end);
+            console.log('eventlist', eventList)
+            for (let i = 0; i < eventList.length; i++) {
+              let event = eventList[i]
+              let eStart = moment(event.start);
+              let eEnd = moment(event.end);
+              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
+                console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
+                reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
+              }
+            }
+            User.findOne({
+              attributes: ['id'],
+              where: { groupName: timeslotObj.username }
+            })
+              .then(({ id }) => {
+                timeslotObj.UserId = id;
+                timeslotObj.RoomId = roomId;
+                Timeslot.create(timeslotObj)
+                  .then((result) => {
+                    resolve(result);
+                  })
+                  .catch(err => {
+                    console.log(`Error creating Timeslot`);
+                    reject({
+                      message: `Error creating Timeslot`,
+                      timeslot: false,
+                    });
+                  });
               })
-              .catch(err => {
-                console.log(`Error creating Timeslot`);
-                reject({
-                  message: `Error creating Timeslot`,
-                  timeslot: false,
-                });
-              });
           })
+
       })
+
   });
 };
 
