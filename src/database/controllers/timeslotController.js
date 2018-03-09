@@ -53,19 +53,21 @@ const findAllTimeslots = () => {
 
 const addTimeslot = (timeslotObj) => {
   return new Promise((resolve, reject) => {
+    //grabs Room Id to apply on event
     Room.findOne({
       attributes: ['id'],
       where: { name: timeslotObj.room }
     })
       .then(({ id }) => {
         let roomId = id
+        //grabs all events in current room
         Timeslot.findAll({
           where: { RoomId: id }
         })
           .then((eventList) => {
+            //checks for overlapping events in DB
             let start = moment(timeslotObj.start);
             let end = moment(timeslotObj.end);
-            console.log('eventlist', eventList)
             for (let i = 0; i < eventList.length; i++) {
               let event = eventList[i]
               let eStart = moment(event.start);
@@ -75,6 +77,7 @@ const addTimeslot = (timeslotObj) => {
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
               }
             }
+            //grabs User id to apply on event
             User.findOne({
               attributes: ['id'],
               where: { groupName: timeslotObj.username }
@@ -83,8 +86,14 @@ const addTimeslot = (timeslotObj) => {
                 timeslotObj.UserId = id;
                 timeslotObj.RoomId = roomId;
                 Timeslot.create(timeslotObj)
-                  .then((result) => {
-                    resolve(result);
+                  .then((timeSlotResult) => {
+                    //updates user.hasEvent to have an existing event
+                    User.update({ hasEvent: true }, {
+                      where: { id }
+                    })
+                    .then(()=> {
+                      resolve(timeSlotResult);
+                    })
                   })
                   .catch(err => {
                     console.log(`Error creating Timeslot`);
