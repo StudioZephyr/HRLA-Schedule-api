@@ -128,27 +128,46 @@ const findAllUserTimeslots = (id) => {
 
 const updateTimeslot = (timeslotObj, id) => {
   return new Promise((resolve, reject) => {
-    console.log('should be updating with id of ', id, 'and obj looks like ', timeslotObj);
-    Timeslot.update(timeslotObj, {
-      where: { id }
+    Timeslot.findAll({
+      where: { RoomId: timeslotObj.RoomId }
     })
-      .then(updated => {
-        if (updated[0] === 0) {
-          reject({
-            message: `Timeslot to update not found`,
-            updated: false,
-          });
-        } else {
-          resolve(`Timeslot Updated`);
+      .then((eventList) => {
+        let start = moment(timeslotObj.start);
+        console.log('looking at start in update', timeslotObj, timeslotObj.start)
+        let end = moment(timeslotObj.end);
+        console.log('eventlist', eventList)
+        for (let i = 0; i < eventList.length; i++) {
+          let event = eventList[i]
+          let eStart = moment(event.start);
+          let eEnd = moment(event.end);
+          if ((start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) && event.id !== timeslotObj.id) {
+            console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT IDS ARE:', event.id, id)
+            reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
+            return;
+          }
         }
+
+        Timeslot.update(timeslotObj, {
+          where: { id }
+        })
+          .then(updated => {
+            if (updated[0] === 0) {
+              reject({
+                message: `Timeslot to update not found`,
+                updated: false,
+              });
+            } else {
+              resolve(`Timeslot Updated`);
+            }
+          })
+          .catch(err => {
+            console.log(`Error updating Timeslot. Error: ${err}`);
+            reject({
+              message: `Error updating Timeslot`,
+              updated: false,
+            });
+          });
       })
-      .catch(err => {
-        console.log(`Error updating Timeslot. Error: ${err}`);
-        reject({
-          message: `Error updating Timeslot`,
-          updated: false,
-        });
-      });
   });
 };
 
