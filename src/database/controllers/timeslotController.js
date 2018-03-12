@@ -73,6 +73,7 @@ const addTimeslot = (timeslotObj) => {
               let eStart = moment(event.start);
               let eEnd = moment(event.end);
               if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
+                console.log('times are', start, end, eStart, eEnd)
                 console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
               }
@@ -80,7 +81,7 @@ const addTimeslot = (timeslotObj) => {
             //grabs User id to apply on event
             User.findOne({
               attributes: ['id'],
-              where: { groupName: timeslotObj.username }
+              where: { groupName: timeslotObj.owner }
             })
               .then(async ({ id }) => {
                 timeslotObj.UserId = id;
@@ -141,37 +142,41 @@ const updateTimeslot = (timeslotObj, id) => {
         console.log('looking at start in update', timeslotObj, timeslotObj.start)
         let end = moment(timeslotObj.end);
         console.log('eventlist', eventList)
+        let validTime = true;
         for (let i = 0; i < eventList.length; i++) {
           let event = eventList[i]
           let eStart = moment(event.start);
           let eEnd = moment(event.end);
           if ((start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) && event.id !== timeslotObj.id) {
+            console.log('times are', start, end, eStart, eEnd)
             console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT IDS ARE:', event.id, id)
+            validTime = false;
             reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
             return;
           }
         }
-
-        Timeslot.update(timeslotObj, {
-          where: { id }
-        })
-          .then(updated => {
-            if (updated[0] === 0) {
+        if (validTime) {
+          Timeslot.update(timeslotObj, {
+            where: { id }
+          })
+            .then(updated => {
+              if (updated[0] === 0) {
+                reject({
+                  message: `Timeslot to update not found`,
+                  updated: false,
+                });
+              } else {
+                resolve(`Timeslot Updated`);
+              }
+            })
+            .catch(err => {
+              console.log(`Error updating Timeslot. Error: ${err}`);
               reject({
-                message: `Timeslot to update not found`,
+                message: `Error updating Timeslot`,
                 updated: false,
               });
-            } else {
-              resolve(`Timeslot Updated`);
-            }
-          })
-          .catch(err => {
-            console.log(`Error updating Timeslot. Error: ${err}`);
-            reject({
-              message: `Error updating Timeslot`,
-              updated: false,
             });
-          });
+        }
       })
   });
 };

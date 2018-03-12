@@ -161,6 +161,7 @@ const seedTimeslots = () => {
           })
             .then(async (room) => {
               timeslots[i].UserId = user.dataValues.id;
+              timeslots[i].owner = user.dataValues.groupName;
               timeslots[i].RoomId = room.dataValues.id;
               await Timeslot.create(timeslots[i])
               console.log(`Timeslot, ${timeslots[i].title}, has been created!`);
