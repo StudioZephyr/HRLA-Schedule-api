@@ -15,21 +15,21 @@ const userData = [
     login: 'admin',
     password: 'admin',
     groupName: 'HRLA Admin',
-    isNew: false,
+    hasEvent: false,
   },
   {
     type: 'group',
     login: 'group1',
     password: 'group1',
     groupName: 'Group1',
-    isNew: false,
+    hasEvent: false,
   },
   {
     type: 'group',
     login: 'group2',
     password: 'group2',
     groupName: 'Group2',
-    isNew: true,
+    hasEvent: false,
   }
 ];
 
@@ -161,6 +161,7 @@ const seedTimeslots = () => {
           })
             .then(async (room) => {
               timeslots[i].UserId = user.dataValues.id;
+              timeslots[i].owner = user.dataValues.groupName;
               timeslots[i].RoomId = room.dataValues.id;
               await Timeslot.create(timeslots[i])
               console.log(`Timeslot, ${timeslots[i].title}, has been created!`);

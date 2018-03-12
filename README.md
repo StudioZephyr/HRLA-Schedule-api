@@ -52,7 +52,7 @@ Example:
 * login: String & Cannot be null
 * password: String & Cannot be null
 * groupName: String & Can be null
-* isNew: Boolean & Cannot be null (Default: true)
+* hasEvent: Boolean & Cannot be null (Default: true)
 
 ### CONTACT
 
@@ -92,7 +92,7 @@ PARAM: USER ID.
   * SUCCESS: returns User info obj
   * FAILURE: returns obj with error message and user boolean as false
 
-* PUT: accepts - ``` { login, password, groupName, isNew, type } ``` | response - ``` { result: obj } ```
+* PUT: accepts - ``` { login, password, groupName, hasEvent, type } ``` | response - ``` { result: obj } ```
   * SUCCESS: returns updated User info
   * FAILURE: returns obj with error message and user boolean as false
 
@@ -102,7 +102,7 @@ PARAM: USER ID.
 
 ### '/signup'
 
-* POST: accepts - ``` { login, password, groupName, isNew, type } ``` | response - ``` { result: obj } ```
+* POST: accepts - ``` { login, password, groupName, hasEvent, type } ``` | response - ``` { result: obj } ```
   * SUCCESS: returns created User info obj
   * FAILURE: returns obj with error message and found, user boolean describing which one failed
 

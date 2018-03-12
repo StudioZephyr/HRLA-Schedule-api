@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+import moment from 'moment';
 
 import { Timeslot } from '../model/timeslot';
 import { User } from '../model/user';
@@ -51,23 +52,45 @@ const findAllTimeslots = () => {
 };
 
 const addTimeslot = (timeslotObj) => {
-  return new Promise(async (resolve, reject) => {
-    User.findOne({
+  return new Promise((resolve, reject) => {
+    //grabs Room Id to apply on event
+    Room.findOne({
       attributes: ['id'],
-      where: { groupName: timeslotObj.username }
+      where: { name: timeslotObj.room }
     })
       .then(({ id }) => {
-        timeslotObj.UserId = id;
-        Room.findOne({
-          attributes: ['id'],
-          where: { name: timeslotObj.room }
+        let roomId = id
+        //grabs all events in current room
+        Timeslot.findAll({
+          where: { RoomId: id }
         })
-          .then(({ id }) => {
-            timeslotObj.RoomId = id;
-
-            Timeslot.create(timeslotObj)
-              .then((result) => {
-                resolve(result);
+          .then((eventList) => {
+            //checks for overlapping events in DB
+            let start = moment(timeslotObj.start);
+            let end = moment(timeslotObj.end);
+            for (let i = 0; i < eventList.length; i++) {
+              let event = eventList[i]
+              let eStart = moment(event.start);
+              let eEnd = moment(event.end);
+              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
+                console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
+                reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
+              }
+            }
+            //grabs User id to apply on event
+            User.findOne({
+              attributes: ['id'],
+              where: { groupName: timeslotObj.owner }
+            })
+              .then(async ({ id }) => {
+                timeslotObj.UserId = id;
+                timeslotObj.RoomId = roomId;
+                const timeSlotResult = await Timeslot.create(timeslotObj)
+                //updates user.hasEvent to have an existing event
+                await User.update({ hasEvent: true }, {
+                  where: { id }
+                })
+                resolve(timeSlotResult);
               })
               .catch(err => {
                 console.log(`Error creating Timeslot`);
@@ -75,9 +98,11 @@ const addTimeslot = (timeslotObj) => {
                   message: `Error creating Timeslot`,
                   timeslot: false,
                 });
-              });
+              })
           })
+
       })
+
   });
 };
 
@@ -108,52 +133,81 @@ const findAllUserTimeslots = (id) => {
 
 const updateTimeslot = (timeslotObj, id) => {
   return new Promise((resolve, reject) => {
-    console.log('should be updating with id of ', id, 'and obj looks like ', timeslotObj);
-    Timeslot.update(timeslotObj, {
-      where: { id }
+    Timeslot.findAll({
+      where: { RoomId: timeslotObj.RoomId }
     })
-      .then(updated => {
-        if (updated[0] === 0) {
-          reject({
-            message: `Timeslot to update not found`,
-            updated: false,
-          });
-        } else {
-          resolve(`Timeslot Updated`);
+      .then((eventList) => {
+        let start = moment(timeslotObj.start);
+        let end = moment(timeslotObj.end);
+        let validTime = true;
+        for (let i = 0; i < eventList.length; i++) {
+          let event = eventList[i]
+          let eStart = moment(event.start);
+          let eEnd = moment(event.end);
+          if ((start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) && event.id !== timeslotObj.id) {
+            console.log('times are', start, end, eStart, eEnd)
+            console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT IDS ARE:', event.id, id)
+            validTime = false;
+            reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
+            return;
+          }
+        }
+        if (validTime) {
+          Timeslot.update(timeslotObj, {
+            where: { id }
+          })
+            .then(updated => {
+              if (updated[0] === 0) {
+                reject({
+                  message: `Timeslot to update not found`,
+                  updated: false,
+                });
+              } else {
+                resolve(`Timeslot Updated`);
+              }
+            })
+            .catch(err => {
+              console.log(`Error updating Timeslot. Error: ${err}`);
+              reject({
+                message: `Error updating Timeslot`,
+                updated: false,
+              });
+            });
         }
       })
-      .catch(err => {
-        console.log(`Error updating Timeslot. Error: ${err}`);
-        reject({
-          message: `Error updating Timeslot`,
-          updated: false,
-        });
-      });
   });
 };
 
 const removeTimeslot = (id) => {
   return new Promise((resolve, reject) => {
-    Timeslot.destroy({
-      where: { id }
+    Timeslot.findOne({
+      where: { id}
     })
-      .then(deleted => {
-        if (deleted === 0) {
+    .then((timeslotObj) => {
+      Timeslot.destroy({
+        where: { id }
+      })
+        .then(async (deleted) => {
+          if (deleted === 0) {
+            reject({
+              message: `Timeslot to delete not found`,
+              deleted: false,
+            });
+          } else {
+            await User.update({ hasEvent: false },{
+              where: { id: timeslotObj.UserId }
+            })
+            resolve(`Timeslot Deleted`);
+          }
+        })
+        .catch(err => {
+          console.log(`Error deleting Timeslot. Error: ${err}`);
           reject({
-            message: `Timeslot to delete not found`,
+            message: `Error deleting Timeslot`,
             deleted: false,
           });
-        } else {
-          resolve(`Timeslot Deleted`);
-        }
-      })
-      .catch(err => {
-        console.log(`Error deleting Timeslot. Error: ${err}`);
-        reject({
-          message: `Error deleting Timeslot`,
-          deleted: false,
         });
-      });
+    })
   });
 };
 
