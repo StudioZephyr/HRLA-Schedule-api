@@ -73,7 +73,6 @@ const addTimeslot = (timeslotObj) => {
               let eStart = moment(event.start);
               let eEnd = moment(event.end);
               if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
-                console.log('times are', start, end, eStart, eEnd)
                 console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
               }
@@ -139,9 +138,7 @@ const updateTimeslot = (timeslotObj, id) => {
     })
       .then((eventList) => {
         let start = moment(timeslotObj.start);
-        console.log('looking at start in update', timeslotObj, timeslotObj.start)
         let end = moment(timeslotObj.end);
-        console.log('eventlist', eventList)
         let validTime = true;
         for (let i = 0; i < eventList.length; i++) {
           let event = eventList[i]
@@ -197,7 +194,6 @@ const removeTimeslot = (id) => {
               deleted: false,
             });
           } else {
-            console.log('deleted:', id)
             await User.update({ hasEvent: false },{
               where: { id: timeslotObj.UserId }
             })
