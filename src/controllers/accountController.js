@@ -74,7 +74,7 @@ const deleteLogin = (req, res) => {
 const getLogin = (req, res) => {
   getSingleUser(req.params.id)
     .then(user => {
-      res.status(200).send({ result: success });
+      res.status(200).send({ result: user });
     })
     .catch(err => {
       res.status(500).send({ result: err });

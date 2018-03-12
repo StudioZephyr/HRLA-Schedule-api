@@ -82,26 +82,22 @@ const addTimeslot = (timeslotObj) => {
               attributes: ['id'],
               where: { groupName: timeslotObj.username }
             })
-              .then(({ id }) => {
+              .then(async ({ id }) => {
                 timeslotObj.UserId = id;
                 timeslotObj.RoomId = roomId;
-                Timeslot.create(timeslotObj)
-                  .then((timeSlotResult) => {
-                    //updates user.hasEvent to have an existing event
-                    User.update({ hasEvent: true }, {
-                      where: { id }
-                    })
-                    .then(()=> {
-                      resolve(timeSlotResult);
-                    })
-                  })
-                  .catch(err => {
-                    console.log(`Error creating Timeslot`);
-                    reject({
-                      message: `Error creating Timeslot`,
-                      timeslot: false,
-                    });
-                  });
+                const timeSlotResult = await Timeslot.create(timeslotObj)
+                //updates user.hasEvent to have an existing event
+                await User.update({ hasEvent: true }, {
+                  where: { id }
+                })
+                resolve(timeSlotResult);
+              })
+              .catch(err => {
+                console.log(`Error creating Timeslot`);
+                reject({
+                  message: `Error creating Timeslot`,
+                  timeslot: false,
+                });
               })
           })
 
@@ -182,26 +178,35 @@ const updateTimeslot = (timeslotObj, id) => {
 
 const removeTimeslot = (id) => {
   return new Promise((resolve, reject) => {
-    Timeslot.destroy({
-      where: { id }
+    Timeslot.findOne({
+      where: { id}
     })
-      .then(deleted => {
-        if (deleted === 0) {
+    .then((timeslotObj) => {
+      Timeslot.destroy({
+        where: { id }
+      })
+        .then(async (deleted) => {
+          if (deleted === 0) {
+            reject({
+              message: `Timeslot to delete not found`,
+              deleted: false,
+            });
+          } else {
+            console.log('deleted:', id)
+            await User.update({ hasEvent: false },{
+              where: { id: timeslotObj.UserId }
+            })
+            resolve(`Timeslot Deleted`);
+          }
+        })
+        .catch(err => {
+          console.log(`Error deleting Timeslot. Error: ${err}`);
           reject({
-            message: `Timeslot to delete not found`,
+            message: `Error deleting Timeslot`,
             deleted: false,
           });
-        } else {
-          resolve(`Timeslot Deleted`);
-        }
-      })
-      .catch(err => {
-        console.log(`Error deleting Timeslot. Error: ${err}`);
-        reject({
-          message: `Error deleting Timeslot`,
-          deleted: false,
         });
-      });
+    })
   });
 };
 

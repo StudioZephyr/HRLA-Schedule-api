@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const CronJob = require('cron').CronJob;
 const { Timeslot } = require('../src/database/model/timeslot');
+const { User } = require('../src/database/model/user');
 
 const task = new CronJob('00 0,15,30,45 * * * *', function () {
   let currentTime = new Date();
@@ -17,7 +18,7 @@ const task = new CronJob('00 0,15,30,45 * * * *', function () {
     .then(async (events) => {
       for (let i = 0; i < events.length; i++) {
         if (events[i].end < currentTime) {
-          event.finished = true;
+          events[i].finished = true;
           await Timeslot.update({ finished: true }, {
             where: { id: events[i].id }
           });

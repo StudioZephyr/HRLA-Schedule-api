@@ -19,7 +19,7 @@ const User = db.define('User', {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  isNew: {
+  hasEvent: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
