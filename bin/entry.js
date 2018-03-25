@@ -13,3 +13,4 @@ if (environment === 'production') {
 }
 
 require('../src/index');
+require('../socket-server/index');
