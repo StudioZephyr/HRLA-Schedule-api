@@ -6,10 +6,8 @@ import { Contact } from '../model/contact';
 
 import { log } from '../../util/logger';
 
-const syncDB = (
-  bool=false,
-  resolve
-) => {
+const syncDB = ( bool=false, resolve) => {
+  
   db.authenticate()
     .then(() => {
       log(`DB authenticated`);

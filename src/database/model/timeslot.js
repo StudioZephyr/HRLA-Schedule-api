@@ -22,10 +22,6 @@ const Timeslot = db.define('Timeslot', {
     allowNull: false,
     defaultValue: false,
   },
-  owner: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
   recurring: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
