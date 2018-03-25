@@ -90,6 +90,7 @@ const addTimeslot = (timeslotObj) => {
               if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
                 console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
+                return;
               }
             }
             timeslotObj.RoomId = roomId;
@@ -167,6 +168,7 @@ const updateTimeslot = (timeslotObj, id) => {
           }
         }
         if (validTime) {
+          console.log('timeslot updating with', timeslotObj);
           Timeslot.update(timeslotObj, {
             where: { id }
           })

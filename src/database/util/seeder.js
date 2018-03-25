@@ -62,26 +62,26 @@ const adminContactData = [
 const timeslots = [
   {
     title: 'test 1',
-    start: new Date(2018, 2, 5, 13, 0, 0),
-    end: new Date(2018, 2, 5, 14, 0, 0),
+    start: new Date(2018, 2, 21, 13, 0, 0),
+    end: new Date(2018, 2, 21, 14, 0, 0),
     finished: false,
   },
   {
     title: 'test 2',
-    start: new Date(2018, 2, 5, 14, 0, 0),
+    start: new Date(2018, 2, 21, 14, 0, 0),
     end: new Date(2018, 2, 5, 15, 30, 0),
     finished: false,
   },
   {
     title: 'test 3',
-    start: new Date(2018, 2, 5, 15, 0, 0),
-    end: new Date(2018, 2, 5, 17, 0, 0),
+    start: new Date(2018, 2, 21, 15, 0, 0),
+    end: new Date(2018, 2, 21, 17, 0, 0),
     finished: false,
   },
   {
     title: 'test 4',
-    start: new Date(2018, 2, 5, 17, 0, 0),
-    end: new Date(2018, 2, 5, 20, 0, 0),
+    start: new Date(2018, 2, 21, 17, 0, 0),
+    end: new Date(2018, 2, 21, 20, 0, 0),
     finished: false,
   }
 
