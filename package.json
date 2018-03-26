@@ -20,7 +20,8 @@
     "moment": "^2.21.0",
     "morgan": "^1.9.0",
     "pg": "^7.4.1",
-    "sequelize": "^4.33.4"
+    "sequelize": "^4.33.4",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
