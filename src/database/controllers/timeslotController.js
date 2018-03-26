@@ -42,8 +42,6 @@ const findAllTimeslots = () => {
         "Users" AS u
       ON
         t."UserId" = u.id
-      WHERE
-        t.finished = false;
     `, { type: db.QueryTypes.SELECT })
       // Timeslot.findAll({
       //   where: { finished: false }

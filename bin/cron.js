@@ -6,11 +6,12 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
+const moment = require('moment');
 const CronJob = require('cron').CronJob;
 const { Timeslot } = require('../src/database/model/timeslot');
 const { User } = require('../src/database/model/user');
 
-const task = new CronJob('00 0,15,30,45 * * * *', function () {
+const checkEvents = new CronJob('00 0,15,30,45 * * * *', function () {
   let currentTime = new Date();
   Timeslot.findAll({
     where: { finished: false }
@@ -48,6 +49,16 @@ const task = new CronJob('00 0,15,30,45 * * * *', function () {
   'America/Los_Angeles'
 );
 
-task.start();
+const deleteEvents = new CronJob('00 59 23 * * *', function () {
+  Timeslot.destroy({
+    where: { finished: true }
+  })
+},
+false,
+'America/Los_Angeles')
 
-console.log('Cron task status:', task.running);
+checkEvents.start();
+deleteEvents.start()
+
+console.log('Cron checkEvents status:', checkEvents.running);
+console.log('Cron deleteEvents status:', deleteEvents.running);
