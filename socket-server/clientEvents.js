@@ -23,3 +23,5 @@ const clientEvents ={
   'clientEventUpdate': clientEventUpdate,
   'clientEventDelete': clientEventDelete
  }
+
+ export default clientEvents;
