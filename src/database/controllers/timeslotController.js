@@ -85,7 +85,7 @@ const addTimeslot = (timeslotObj) => {
               let event = eventList[i]
               let eStart = moment(event.start);
               let eEnd = moment(event.end);
-              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
+              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end) || end.isSame(eEnd) || start.isSame(eStart)) {
                 console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
                 return;
