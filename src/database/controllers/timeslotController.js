@@ -43,9 +43,6 @@ const findAllTimeslots = () => {
       ON
         t."UserId" = u.id
     `, { type: db.QueryTypes.SELECT })
-      // Timeslot.findAll({
-      //   where: { finished: false }
-      // })
       .then(timeslots => {
         const timeslotArr = [];
         for (let i = 0; i < timeslots.length; i++) {
@@ -85,7 +82,7 @@ const addTimeslot = (timeslotObj) => {
               let event = eventList[i]
               let eStart = moment(event.start);
               let eEnd = moment(event.end);
-              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) {
+              if (start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end) || end.isSame(eEnd) || start.isSame(eStart)) {
                 console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT')
                 reject({ message: `Timeslot already claimed between ${eStart} and ${eEnd}` })
                 return;
@@ -157,7 +154,7 @@ const updateTimeslot = (timeslotObj, id) => {
           let event = eventList[i]
           let eStart = moment(event.start);
           let eEnd = moment(event.end);
-          if ((start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end)) && event.id !== timeslotObj.id) {
+          if ((start.isBetween(eStart, eEnd) || end.isBetween(eStart, eEnd) || eStart.isBetween(start, end) || eEnd.isBetween(start, end) || end.isSame(eEnd) || start.isSame(eStart)) && event.id !== timeslotObj.id ) {
             console.log('times are', start, end, eStart, eEnd)
             console.log('ISSUE FOUND IN CREATING TIMESLOT: SPOT TAKEN, SHOULD REJECT IDS ARE:', event.id, id)
             validTime = false;
