@@ -29,7 +29,7 @@ npm run seed
 ```
 
 The script takes in the following commands:
-* all: seeds all basic data (not including any timeslots)
+* all: seeds all basic data
 * drop: drops and re-syncs all tables
 * user: seeds all basic user table data
 * room: seeds all basic room table data
@@ -69,6 +69,7 @@ Example:
 * start: Date & Cannot be null
 * end: Date & Cannot be null
 * finished: Boolean & Cannot be null (Default: false)
+* recurring: Boolean & Cannot be null (Default: false)
 
 ## API Routes + Responses
 
@@ -159,11 +160,11 @@ PARAM: ROOM ID.
 ### '/timeslot'
 
 * GET: response - ``` { result: obj } ```
-  * SUCCESS: returns array of all active Timeslots
+  * SUCCESS: returns array of all Timeslots
   * FAILURE: returns obj with error message and timeslot boolean as false
 
-* POST: accepts - ``` { title, start, end, finished } ``` | response - ``` { result: str/obj } ```
-  * SUCCESS: returns string indicating successful creation
+* POST: accepts - ``` { title, start, end, finished, recurring } ``` | response - ``` { result: str/obj } ```
+  * SUCCESS: returns posted timeslot obj with groupName
   * FAILURE: returns obj with error message and timeslot boolean as false
 
 ### '/timeslot/:id'
