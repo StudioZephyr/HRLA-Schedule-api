@@ -14,6 +14,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
 
+// app.get('*.js', function (req, res, next) {
+
+//   req.url = req.url + '.gz';
+//   res.set('Content-Encoding', 'gzip');
+//   next();
+// });
+
 // Use for dev environment
 app.use(express.static(path.resolve(__dirname, process.env.STATIC_PATH)));
 
