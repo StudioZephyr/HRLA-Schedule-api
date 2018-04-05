@@ -1,6 +1,7 @@
 require('babel-register');
 require('babel-polyfill');
 
+const http = require('http');
 const path = require('path');
 const dotenv = require('dotenv');
 
@@ -10,6 +11,8 @@ const moment = require('moment');
 const CronJob = require('cron').CronJob;
 const { Timeslot } = require('../src/database/model/timeslot');
 const { User } = require('../src/database/model/user');
+
+const io = require('../socket-server/socket.js').io;
 
 const checkEvents = new CronJob('00 0,15,30,45 * * * *', function () {
   let currentTime = new Date();
@@ -40,6 +43,11 @@ const checkEvents = new CronJob('00 0,15,30,45 * * * *', function () {
               await User.update({hasEvent: false}, {
                 where: { id: user.id }
               });
+            }
+            if (i === users.length - 1) {
+              console.log('emitting to socket')
+              // io.sockets.emit('updateRequest', 'update now')
+              http.get(process.env.API_SOCKET);
             }
           }
         })
