@@ -45,8 +45,6 @@ const checkEvents = new CronJob('00 0,15,30,45 * * * *', function () {
               });
             }
             if (i === users.length - 1) {
-              console.log('emitting to socket')
-              // io.sockets.emit('updateRequest', 'update now')
               http.get(process.env.API_SOCKET);
             }
           }

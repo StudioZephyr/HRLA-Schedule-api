@@ -3,7 +3,6 @@ import SocketIo from 'socket.io';
 import http from 'http';
 import clientEvents from './clientEvents.js';
 
-console.log('here')
 export const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     io.sockets.emit('updateRequest');
